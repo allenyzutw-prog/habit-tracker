@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>個人成長中心</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --paper: #faf7f2;
+    --ink: #1a1612;
+    --ink-light: #6b6056;
+    --accent: #c1440e;
+    --accent-soft: #f0e0d6;
+    --gold: #b8860b;
+    --gold-light: #f5edd6;
+    --border: #d8cfc4;
+    --green: #3a6b4a;
+    --green-light: #d8ead0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Noto Serif TC', serif;
+    color: var(--ink);
+    min-height: 100vh;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,0.03) 27px, rgba(0,0,0,0.03) 28px);
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .site-header {
+    text-align: center;
+    margin-bottom: 52px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .site-header .emoji-icon {
+    font-size: 2.4rem;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .site-title {
+    font-family: 'Playfair Display', 'Noto Serif TC', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .site-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-light);
+    margin-top: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: var(--accent);
+    margin: 16px auto 0;
+  }
+
+  /* Section titles */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 12px;
+    box-shadow: 2px 2px 0 var(--border);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    animation: fadeUp 0.5s ease both;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 var(--border);
+  }
+
+  /* Goals Section */
+  .goals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .goals-grid { grid-template-columns: 1fr; }
+    .site-title { font-size: 1.8rem; }
+  }
+
+  .goal-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 2px 2px 0 var(--border);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    animation: fadeUp 0.5s ease both;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .goal-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .goal-card.health::before { background: #e05c3a; }
+  .goal-card.finance::before { background: var(--gold); }
+  .goal-card.learning::before { background: #3a7bb8; }
+  .goal-card.lifestyle::before { background: var(--green); }
+
+  .goal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 var(--border);
+  }
+
+  .goal-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  .health .goal-tag { background: #fde8e0; color: #c03010; }
+  .finance .goal-tag { background: var(--gold-light); color: #8b6000; }
+  .learning .goal-tag { background: #dde8f8; color: #1a4f8a; }
+  .lifestyle .goal-tag { background: var(--green-light); color: #1e5030; }
+
+  .goal-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 2px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+  }
+  .health .progress-bar { background: #e05c3a; }
+  .finance .progress-bar { background: var(--gold); }
+  .learning .progress-bar { background: #3a7bb8; }
+  .lifestyle .progress-bar { background: var(--green); }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ink-light);
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* Habit Tracker */
+  .habits-section { margin-bottom: 40px; }
+
+  .habit-row {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 20px;
+    margin-bottom: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 2px 2px 0 var(--border);
+    animation: fadeUp 0.5s ease both;
+    transition: box-shadow 0.15s;
+  }
+  .habit-row:hover { box-shadow: 4px 4px 0 var(--border); }
+
+  .habit-info { display: flex; align-items: center; gap: 12px; }
+
+  .habit-emoji { font-size: 1.2rem; flex-shrink: 0; }
+
+  .habit-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .habit-desc {
+    font-size: 0.78rem;
+    color: var(--ink-light);
+    margin-top: 1px;
+  }
+
+  .week-checks {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .day-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--ink-light);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .day-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+  .check-box {
+    width: 26px;
+    height: 26px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    background: white;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .check-box:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .check-box.checked {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .check-box.today {
+    border-color: var(--accent);
+  }
+
+  /* Weekly Review */
+  .review-section { margin-bottom: 40px; }
+
+  .review-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 28px;
+    box-shadow: 2px 2px 0 var(--border);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .review-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ink-light);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+
+  .review-q {
+    margin-bottom: 18px;
+  }
+
+  .review-q label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+  .review-q label span { color: var(--accent); margin-right: 4px; }
+
+  .review-q textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--bg);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.88rem;
+    color: var(--ink);
+    padding: 10px 12px;
+    resize: vertical;
+    min-height: 64px;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.6;
+  }
+  .review-q textarea:focus { border-color: var(--accent); }
+
+  .save-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 4px;
+  }
+  .save-btn:hover { background: var(--accent); }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 24px;
+    margin-bottom: 40px;
+    box-shadow: 2px 2px 0 var(--border);
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .stat-item { flex: 1; text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  .stat-divider { width: 1px; background: var(--border); }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .goal-card:nth-child(1) { animation-delay: 0.05s; }
+  .goal-card:nth-child(2) { animation-delay: 0.10s; }
+  .goal-card:nth-child(3) { animation-delay: 0.15s; }
+  .goal-card:nth-child(4) { animation-delay: 0.20s; }
+  .habit-row:nth-child(1) { animation-delay: 0.10s; }
+  .habit-row:nth-child(2) { animation-delay: 0.15s; }
+  .habit-row:nth-child(3) { animation-delay: 0.20s; }
+  .habit-row:nth-child(4) { animation-delay: 0.25s; }
+  .habit-row:nth-child(5) { animation-delay: 0.30s; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    padding: 10px 22px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    letter-spacing: 0.05em;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="site-header">
+    <span class="emoji-icon">🌱</span>
+    <h1 class="site-title">個人成長中心</h1>
+    <p class="site-subtitle">Personal Growth Dashboard · 2025</p>
+    <div class="divider"></div>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-goals">4</div>
+      <div class="stat-lbl">進行中目標</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-streak">0</div>
+      <div class="stat-lbl">本週完成格</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-rate">0%</div>
+      <div class="stat-lbl">習慣完成率</div>
+    </div>
+  </div>
+
+  <!-- Goals -->
+  <div class="section-label">🎯 年度目標</div>
+  <div class="goals-grid" id="goals-grid">
+    <div class="goal-card health">
+      <span class="goal-tag">健康</span>
+      <div class="goal-name">每週運動 3 次</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:60%"></div></div>
+      <div class="progress-label">60%</div>
+    </div>
+    <div class="goal-card finance">
+      <span class="goal-tag">財務</span>
+      <div class="goal-name">每月存下 20%</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:40%"></div></div>
+      <div class="progress-label">40%</div>
+    </div>
+    <div class="goal-card learning">
+      <span class="goal-tag">學習</span>
+      <div class="goal-name">讀完 12 本書</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:25%"></div></div>
+      <div class="progress-label">25%</div>
+    </div>
+    <div class="goal-card lifestyle">
+      <span class="goal-tag">生活</span>
+      <div class="goal-name">每天 7 小時睡眠</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:75%"></div></div>
+      <div class="progress-label">75%</div>
+    </div>
+  </div>
+
+  <!-- Habit Tracker -->
+  <div class="habits-section">
+    <div class="section-label">✅ 本週習慣追蹤</div>
+    <div id="habits-container"></div>
+  </div>
+
+  <!-- Weekly Review -->
+  <div class="review-section">
+    <div class="section-label">📓 每週回顧</div>
+    <div class="review-card">
+      <div class="review-date" id="review-date"></div>
+      <div class="review-q">
+        <label><span>Q1</span>本週完成了什麼值得記錄的事？</label>
+        <textarea id="q1" placeholder="寫下本週的成就或亮點…"></textarea>
+      </div>
+      <div class="review-q">
+        <label><span>Q2</span>哪個習慣最不穩定？原因是什麼？</label>
+        <textarea id="q2" placeholder="誠實回顧，找出阻礙…"></textarea>
+      </div>
+      <div class="review-q">
+        <label><span>Q3</span>下週想專注在哪一件事？</label>
+        <textarea id="q3" placeholder="設定一個清晰的週焦點…"></textarea>
+      </div>
+      <button class="save-btn" onclick="saveReview()">儲存回顧 →</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const HABITS = [
+  { emoji: '🏃', name: '運動', desc: '30 分鐘以上', linked: '每週運動 3 次' },
+  { emoji: '📚', name: '閱讀', desc: '睡前 20 頁', linked: '讀完 12 本書' },
+  { emoji: '💧', name: '喝水', desc: '每天 2000ml', linked: '每天 7 小時睡眠' },
+  { emoji: '🧘', name: '冥想', desc: '10 分鐘', linked: '每天 7 小時睡眠' },
+  { emoji: '💰', name: '記帳', desc: '記錄每日支出', linked: '每月存下 20%' },
+];
+
+const DAYS = ['一','二','三','四','五','六','日'];
+const TODAY = new Date().getDay(); // 0=Sun
+const todayIdx = TODAY === 0 ? 6 : TODAY - 1;
+
+// Load state
+let state = JSON.parse(localStorage.getItem('habitState') || '{}');
+
+function getKey(habitIdx, dayIdx) { return `h${habitIdx}_d${dayIdx}`; }
+
+function renderHabits() {
+  const container = document.getElementById('habits-container');
+  container.innerHTML = '';
+  HABITS.forEach((habit, hi) => {
+    const row = document.createElement('div');
+    row.className = 'habit-row';
+
+    const info = document.createElement('div');
+    info.className = 'habit-info';
+    info.innerHTML = `<span class="habit-emoji">${habit.emoji}</span>
+      <div><div class="habit-name">${habit.name}</div><div class="habit-desc">${habit.desc}</div></div>`;
+
+    const checks = document.createElement('div');
+    checks.className = 'week-checks';
+
+    DAYS.forEach((day, di) => {
+      const col = document.createElement('div');
+      col.className = 'day-col';
+      const lbl = document.createElement('div');
+      lbl.className = 'day-label';
+      lbl.textContent = day;
+      const box = document.createElement('div');
+      box.className = 'check-box' + (state[getKey(hi,di)] ? ' checked' : '') + (di === todayIdx ? ' today' : '');
+      box.textContent = state[getKey(hi,di)] ? '✓' : '';
+      box.onclick = () => toggleCheck(hi, di, box);
+      col.appendChild(lbl);
+      col.appendChild(box);
+      checks.appendChild(col);
+    });
+
+    row.appendChild(info);
+    row.appendChild(checks);
+    container.appendChild(row);
+  });
+  updateStats();
+}
+
+function toggleCheck(hi, di, box) {
+  const key = getKey(hi, di);
+  state[key] = !state[key];
+  localStorage.setItem('habitState', JSON.stringify(state));
+  box.classList.toggle('checked', state[key]);
+  box.textContent = state[key] ? '✓' : '';
+  updateStats();
+}
+
+function updateStats() {
+  const total = HABITS.length * 7;
+  const done = Object.values(state).filter(Boolean).length;
+  document.getElementById('stat-streak').textContent = done;
+  document.getElementById('stat-rate').textContent = Math.round(done/total*100) + '%';
+}
+
+function setReviewDate() {
+  const now = new Date();
+  const start = new Date(now);
+  start.setDate(now.getDate() - now.getDay() + 1);
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  const fmt = d => `${d.getMonth()+1}/${d.getDate()}`;
+  document.getElementById('review-date').textContent =
+    `Week of ${fmt(start)} – ${fmt(end)} · ${now.getFullYear()}`;
+}
+
+function saveReview() {
+  const review = {
+    q1: document.getElementById('q1').value,
+    q2: document.getElementById('q2').value,
+    q3: document.getElementById('q3').value,
+    saved: new Date().toISOString()
+  };
+  localStorage.setItem('weeklyReview', JSON.stringify(review));
+  showToast('✓ 回顧已儲存');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// Load saved review
+const saved = JSON.parse(localStorage.getItem('weeklyReview') || '{}');
+if (saved.q1) document.getElementById('q1').value = saved.q1;
+if (saved.q2) document.getElementById('q2').value = saved.q2;
+if (saved.q3) document.getElementById('q3').value = saved.q3;
+
+setReviewDate();
+renderHabits();
+</script>
+</body>
+</html>
